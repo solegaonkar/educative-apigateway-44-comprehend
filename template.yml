@@ -30,7 +30,7 @@ Resources:
                       schema:
                         $ref: "#/components/schemas/Empty"
               x-amazon-apigateway-integration:
-                credentials: "arn:aws:iam::869871132949:role/AdminAPI"
+                credentials: !Sub "arn:aws:iam::${AWS::AccountId}:role/EducativeRole"
                 httpMethod: "POST"
                 uri: "arn:aws:apigateway:us-east-1:comprehend:path//"
                 responses:
@@ -59,7 +59,6 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
-                - lambda.amazonaws.com
                 - apigateway.amazonaws.com
             Action:
               - sts:AssumeRole
@@ -79,9 +78,8 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - s3:PutObject
-                  - s3:GetObject
-                Resource: "arn:aws:s3:::*"
+                  - comprehend:DetectEntities
+                Resource: "*"
   APIDeployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
